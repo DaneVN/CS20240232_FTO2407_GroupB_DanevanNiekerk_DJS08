@@ -51,21 +51,42 @@ export async function getHostVans() {
   }));
   return vans;
 }
+const userCollectionRef = collection(db, "users");
 
 export async function loginUser(creds) {
-  const res = await fetch("/api/login", {
-    method: "post",
-    body: JSON.stringify(creds),
-  });
-  const data = await res.json();
+  try {
+    // Fetch all users from the Firestore collection
+    const snapshot = await getDocs(userCollectionRef);
+    const users = snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
 
-  if (!res.ok) {
+    // Find a user that matches the credentials
+    const user = users.find(
+      (u) => u.email === creds.email && u.password === creds.password
+    );
+
+    if (!user) {
+      throw {
+        message: "No users exists with these credentials",
+        statusText: "Unauthorized",
+        status: 401,
+      };
+    }
+
+    // Simulate the same data structure returned by the API
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    };
+  } catch (err) {
+    // Throw an error object
     throw {
-      message: data.message,
-      statusText: res.statusText,
-      status: res.status,
+      message: err.message || "An error occurred",
+      statusText: err.statusText || "Internal Server Error",
+      status: err.status || 500,
     };
   }
-
-  return data;
 }
