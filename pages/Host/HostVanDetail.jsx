@@ -7,7 +7,7 @@ import {
   defer,
   Await,
 } from "react-router-dom";
-import { getVan } from "../../api/firebase.js";
+import { getVan } from "../../api/api.js";
 
 export function loader({ params }) {
   return defer({ van: getVan(params.id) });

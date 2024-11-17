@@ -1,14 +1,19 @@
 import React from "react";
-import { Link, defer, Await, useLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BsStarFill } from "react-icons/bs";
-import { getHostVans } from "../../api/firebase,js";
-
-export function loader() {
-  return defer({ vans: getHostVans() });
-}
+import { getHostVans } from "../../api/api.js";
 
 export default function Dashboard() {
-  const loaderData = useLoaderData();
+  const [vans, setVans] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  React.useEffect(() => {
+    setLoading(true);
+    getHostVans()
+      .then((data) => setVans(data))
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
+  }, []);
 
   function renderVanElements(vans) {
     const hostVansEls = vans.map((van) => (
@@ -27,6 +32,10 @@ export default function Dashboard() {
         <section>{hostVansEls}</section>
       </div>
     );
+  }
+
+  if (error) {
+    return <h1>Error: {error.message}</h1>;
   }
 
   return (
@@ -56,9 +65,14 @@ export default function Dashboard() {
           <h2>Your listed vans</h2>
           <Link to="vans">View all</Link>
         </div>
-        <React.Suspense fallback={<h3>Loading...</h3>}>
+        {loading && !vans ? (
+          <h1>Loading...</h1>
+        ) : (
+          <>{renderVanElements(vans)}</>
+        )}
+        {/* <React.Suspense fallback={<h3>Loading...</h3>}>
           <Await resolve={loaderData.vans}>{renderVanElements}</Await>
-        </React.Suspense>
+        </React.Suspense> */}
       </section>
     </>
   );

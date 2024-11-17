@@ -21,32 +21,51 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Refactoring the fetching functions below
 const vansCollectionRef = collection(db, "vans");
 
-export async function getAllVans() {
-  const querySnapshot = await getDocs(vansCollectionRef);
-  const dataArr = querySnapshot.docs.map((doc) => ({
+export async function getVans() {
+  const snapshot = await getDocs(vansCollectionRef);
+  const vans = snapshot.docs.map((doc) => ({
     ...doc.data(),
     id: doc.id,
   }));
-  return dataArr;
+  return vans;
 }
 
 export async function getVan(id) {
   const docRef = doc(db, "vans", id);
-  const vanSnapshot = await getDoc(docRef);
+  const snapshot = await getDoc(docRef);
   return {
-    ...vanSnapshot.data(),
-    id: vanSnapshot.id,
+    ...snapshot.data(),
+    id: snapshot.id,
   };
 }
 
 export async function getHostVans() {
   const q = query(vansCollectionRef, where("hostId", "==", "123"));
-  const querySnapshot = await getDocs(q);
-  const dataArr = querySnapshot.docs.map((doc) => ({
+  const snapshot = await getDocs(q);
+  const vans = snapshot.docs.map((doc) => ({
     ...doc.data(),
     id: doc.id,
   }));
-  return dataArr;
+  return vans;
+}
+
+export async function loginUser(creds) {
+  const res = await fetch("/api/login", {
+    method: "post",
+    body: JSON.stringify(creds),
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw {
+      message: data.message,
+      statusText: res.statusText,
+      status: res.status,
+    };
+  }
+
+  return data;
 }

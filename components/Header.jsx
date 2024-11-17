@@ -8,7 +8,7 @@ export default function Header() {
     textDecoration: "underline",
     color: "#161616",
   };
-
+  //eslint-disable-next-line
   function fakeLogOut() {
     localStorage.removeItem("loggedin");
   }

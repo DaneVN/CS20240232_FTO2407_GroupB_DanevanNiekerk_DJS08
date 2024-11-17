@@ -1,20 +1,36 @@
 import React from "react";
-import {
-  Link,
-  useLocation,
-  useLoaderData,
-  defer,
-  Await,
-} from "react-router-dom";
-import { getVan } from "../../api/firebase.js";
-
-export function loader({ params }) {
-  return defer({ van: getVan(params.id) });
-}
+import { Link, useParams, useLocation } from "react-router-dom";
+import { getVan } from "../../api/api.js";
 
 export default function VanDetail() {
+  const [van, setVan] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  const { id } = useParams();
   const location = useLocation();
-  const loaderData = useLoaderData();
+
+  React.useEffect(() => {
+    async function loadVans() {
+      setLoading(true);
+      try {
+        const data = await getVan(id);
+        setVan(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadVans();
+  }, [id]);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (error) {
+    return <h1>There was an error: {error.message}</h1>;
+  }
 
   const search = location.state?.search || "";
   const type = location.state?.type || "all";
@@ -24,22 +40,19 @@ export default function VanDetail() {
       <Link to={`..${search}`} relative="path" className="back-button">
         &larr; <span>Back to {type} vans</span>
       </Link>
-      <React.Suspense fallback={<h2>Loading...</h2>}>
-        <Await resolve={loaderData.van}>
-          {(van) => (
-            <div className="van-detail">
-              <img src={van.imageUrl} />
-              <i className={`van-type ${van.type} selected`}>{van.type}</i>
-              <h2>{van.name}</h2>
-              <p className="van-price">
-                <span>${van.price}</span>/day
-              </p>
-              <p>{van.description}</p>
-              <button className="link-button">Rent this van</button>
-            </div>
-          )}
-        </Await>
-      </React.Suspense>
+
+      {van && (
+        <div className="van-detail">
+          <img src={van.imageUrl} />
+          <i className={`van-type ${van.type} selected`}>{van.type}</i>
+          <h2>{van.name}</h2>
+          <p className="van-price">
+            <span>${van.price}</span>/day
+          </p>
+          <p>{van.description}</p>
+          <button className="link-button">Rent this van</button>
+        </div>
+      )}
     </div>
   );
 }
