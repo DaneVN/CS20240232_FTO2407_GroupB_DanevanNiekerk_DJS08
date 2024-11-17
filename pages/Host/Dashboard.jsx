@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, defer, Await, useLoaderData } from "react-router-dom";
 import { BsStarFill } from "react-icons/bs";
-import { getHostVans } from "../../api/firebase";
+import { getHostVans } from "../../api/firebase,js";
 
 export function loader() {
   return defer({ vans: getHostVans() });

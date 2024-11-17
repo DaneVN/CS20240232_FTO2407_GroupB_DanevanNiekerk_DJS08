@@ -7,7 +7,7 @@ import {
   useActionData,
   Form,
 } from "react-router-dom";
-import { loginUser } from "../api";
+import { loginUser } from "../api.jsx";
 
 export async function action({ request }) {
   const formData = await request.formData();

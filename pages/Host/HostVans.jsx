@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, defer, useLoaderData, Await } from "react-router-dom";
 // import { getHostVans } from "../../api"
-import { getHostVans } from "../../api/firebase";
+import { getHostVans } from "../../api/firebase.js";
 
 export function loader() {
   return defer({ vans: getHostVans() });

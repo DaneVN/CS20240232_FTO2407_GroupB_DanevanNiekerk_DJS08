@@ -6,28 +6,30 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Vans, { loader as vansLoader } from "./pages/Vans/Vans";
-import VanDetail, { loader as vanDetailLoader } from "./pages/Vans/VanDetail";
-import Dashboard, { loader as dashboardLoader } from "./pages/Host/Dashboard";
-import Income from "./pages/Host/Income";
-import Reviews from "./pages/Host/Reviews";
-import HostVans, { loader as hostVansLoader } from "./pages/Host/HostVans";
+import Home from "../pages/Home.jsx";
+import About from "../pages/About.jsx";
+import Vans, { loader as vansLoader } from "../pages/Vans/Vans.jsx";
+import VanDetail, {
+  loader as vanDetailLoader,
+} from "../pages/Vans/VanDetail.jsx";
+import Dashboard, {
+  loader as dashboardLoader,
+} from "../pages/Host/Dashboard.jsx";
+import Income from "../pages/Host/Income.jsx";
+import Reviews from "../pages/Host/Reviews.jsx";
+import HostVans, { loader as hostVansLoader } from "../pages/Host/HostVans.jsx";
 import HostVanDetail, {
   loader as hostVansDetailLoader,
-} from "./pages/Host/HostVanDetail";
-import HostVanInfo from "./pages/Host/HostVanInfo";
-import HostVanPricing from "./pages/Host/HostVanPricing";
-import HostVanPhotos from "./pages/Host/HostVanPhotos";
-import NotFound from "./pages/NotFound";
-import Login, { action as loginAction } from "./pages/Login";
-import Layout from "./components/Layout";
-import HostLayout from "./components/HostLayout";
-import Error from "./components/Error";
-import AuthRequired from "./components/AuthRequired";
-
-import "./server";
+} from "../pages/Host/HostVanDetail.jsx";
+import HostVanInfo from "../pages/Host/HostVanInfo.jsx";
+import HostVanPricing from "../pages/Host/HostVanPricing.jsx";
+import HostVanPhotos from "../pages/Host/HostVanPhotos.jsx";
+import NotFound from "../pages/NotFound.jsx";
+import Login, { action as loginAction } from "../pages/Login.jsx";
+import Layout from "../components/Layout.jsx";
+import HostLayout from "../components/HostLayout.jsx";
+import Error from "../components/Error.jsx";
+import AuthRequired from "../components/AuthRequired.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
